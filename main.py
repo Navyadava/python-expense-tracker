@@ -1,66 +1,85 @@
-expenses = []
+import csv
+import os
+from datetime import date
+
+FILE_NAME = "expenses.csv"
+
+def create_csv_file():
+    if not os.path.exists(FILE_NAME):
+        with open(FILE_NAME, "w", newline = "") as file:
+            writer = csv.writer(file)
+            writer.writerow(["Date", "Category", "Amount", "Note"])
+
 
 def add_expense():
-    amount = float(input("enter expense amount: $"))
+    print("\n---Add Expense ---")
+
+    expense_date = input(
+        "Enter date (YYYY-MM-DD) or press Enter for today: "
+    )
+    if expense_date == "":
+        expense_date = str(date.today())
+
     category = input("enter category")
-    date = input("enter date (YYYY-MM-DD): ")
+    amount = float(input("enter expense amount: $"))
     note = input("enter note: ")
 
-expense = {
-    "amount": 250.0,
-    "category": "Food",
-    "date": "2026-08-15",
-    "note": "Lunch" 
-}
+    with open(FILE_NAME, "a", newline = "") as file:
+        writer = csv.writer(file)
 
-expenses.append(expense)
+        writer.writerow([
+            expense_date,
+            category,
+            amount,
+            note
+        ])
+
 print("expense added successfully!")
 
 def view_expenses():
-    if len(expense) == 0:
-        print("no expense found.")
-        return
+    print("\n----Your expenses---")
 
-    print("\nsaves expenses")
-    print("----------------")
+    with open(FILE_NAME, "r")as file:
+        reader = csv.DictReader(file)
 
-    for expense in expenses:
-        print(f"Amount: ${expense['amount']:.2f}")
-        print(f"Category: {expense['category']}")
-        print(f"Date: {expense['date']}")
-        print(f"Note: {expenses['note']}")
-        print("--------------")
+        found = False
 
-def calculate_total():
-    total = 0
+        for expenses in reader:
+            found = True
 
-    for expense in expenses:
-        total = total + expense["amount"]
+        print(
+            f"Date: {expenses['Date']}|"
+            f"Category: {expenses['Category']}|"
+            f"Amount: ${float(expenses['Amount']):.2f}|"
+            f"Note: {expenses['Note']}|"
+        )
 
-    print(f"Total expenses: ${total:.2f}")
+    if not found:
+        print("No expenses found.")
 
-while True:
-    print("\nExpense Tracker")
-    print("----------------")
-    print("1. Add expense")
-    print("2. View expenses")
-    print("3. Show total")
-    print("4. Exit")
+def show_menu():
+    while True:
+        print("\n-----------")
+        print("     Expense Tracker")
+        print("---------------")
+        print("1. Add expense")
+        print("2. View expenses")
+        print("3. Exit")
 
-    choice = input("Enter your choice (1-4): ")
+        choice = input("Choose an option: ")
 
-    if choice == "1":
-        add_expense()
+        if choice == "1":
+            add_expense()
 
-    elif choice == "2":
-        view_expenses()
+        elif choice == "2":
+            view_expenses()
 
-    elif choice == "3":
-        calculate_total()
+        elif choice == "3":
+            print("Goodbye!")
+            break
 
-    elif choice == "4":
-        print("Goodbye!")
-        break
+        else:
+            print("Invalid choice.")
 
-    else:
-        print("Please enter a valid option.")
+create_csv_file()
+show_menu()
