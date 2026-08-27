@@ -1,10 +1,13 @@
-import csv
+def validate_email(email):
+    if "@" in email and "." in email:
+        return True
+    else:
+        return False
 
-with open("people.csv", "w", newline = "")as file:
-    writer = csv.writer(file)
 
-    writer.writerow(["Name", "email", "City"])
-    writer.writerow(["Sweety", "sweety@gmail.com", "New York"])
-    writer.writerow(["pinky", "pinky@gmail.com", "orlando"])
+email = input("Enter your email: ")
 
-print("CSV created!")
+if validate_email(email):
+    print("Valid email.")
+else:
+    print("Invalid email.")
