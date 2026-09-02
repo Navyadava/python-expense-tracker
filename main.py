@@ -4,6 +4,7 @@ from datetime import date
 
 
 from expense import Expense
+from helpers import get_valid_amount, get_non_empty_text
 
 
 FILE_NAME = "expenses.csv"
@@ -16,37 +17,6 @@ def create_csv_file():
             writer.writerow(["Date", "Category", "Amount", "Note"])
 
 
-def validate_amount(value):
-    try:
-        amount = float(value)
-    except ValueError:
-        raise ValueError("Invalid amount")
-
-    if amount <= 0:
-        raise ValueError("Amount must be positive")
-
-    return amount
-
-
-def get_valid_amount():
-    while True:
-        user_input = input("Enter amount: $")
-
-        try:
-            return validate_amount(user_input)
-
-        except ValueError:
-            print("Invalid amount. Please enter a positive number.")
-
-
-def get_valid_category():
-    while True:
-        category = input("Enter category: ").strip()
-
-        if category == "":
-            print("Category cannot be blank.")
-        else:
-            return category
 
 
 def load_expenses():
@@ -94,7 +64,7 @@ def add_expense():
     if expense_date == "":
         expense_date = str(date.today())
 
-    category = get_valid_category()
+    category = get_non_empty_text("Enter category: ")
     amount = get_valid_amount()
     note = input("Enter note: ").strip()
 
@@ -122,13 +92,15 @@ def view_expenses():
         print("No expenses found.")
         return
 
-    for expense in expenses:
-        print(
-            f"Date: {expense['Date']} | "
-            f"Category: {expense['Category']} | "
-            f"Amount: ${float(expense['Amount']):.2f} | "
-            f"Note: {expense['Note']}"
+    for item in expenses:
+        expense = Expense(
+            float(item["Amount"]),
+            item["Category"],
+            item["Date"],
+            item["Note"]
         )
+
+        print(expense)
 
 
 def show_today_total():
@@ -233,7 +205,7 @@ if __name__ == "__main__":
     )
 
     print("\n--- OOP Expense Test ---")
-    print(test_expense.display())
+    print(test_expense)
 
     create_csv_file()
     show_menu()

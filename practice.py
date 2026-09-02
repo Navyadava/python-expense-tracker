@@ -46,3 +46,56 @@ print("Book:", book1.title)
 print("Author:", book1.author)
 print(f"Original Price: ${book1.price:.2f}")
 print(f"Discounted Price: ${new_price:.2f}")
+
+
+
+class Car:
+    def __init__(self, brand, model, year):
+        self.brand = brand
+        self.model = model
+        self.year = year
+
+    def display_info(self):
+        print(f"Brand: {self.brand}")
+        print(f"Model: {self.model}")
+        print(f"Year: {self.year}")
+
+    def __str__(self):
+        return f"{self.year} {self.brand} {self.model}"
+
+car1 = Car("Toyota", "Camry", 2024)
+
+car1.display_info()
+print(car1)
+
+
+class BankAcount():
+    def __init__(self, balance):
+        self.balance = balance
+
+    def deposit(self, amount):
+        if amount > 0:
+            self.balance += amount
+            print(f"Deposited: ${amount:.2f}")
+
+        else:
+            print("Deposit amount must be positive.")
+
+    def Withdraw(self, amount):
+        if amount <= 0:
+            print("Withdrawal amount must be positive.")
+
+        elif amount > self.balance:
+            print("Insufficient balance.")
+
+        else:
+            self.balance -= amount
+            print(f"Withdrawn: ${amount:.2f}")
+
+account1 = BankAcount(500)
+
+account1.deposit(100)
+account1.Withdraw(1000)
+
+print(f"Current Balance: ${account1.balance:.2f}")
+        

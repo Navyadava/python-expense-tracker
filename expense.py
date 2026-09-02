@@ -5,10 +5,12 @@ class Expense:
         self.date = date
         self.note = note
 
-    def display(self):
+    def __str__(self):
         return(
             f"Date: {self.date}  |"
             f"Category: {self.category}  |"
             f"Amount: {self.amount}  |"
             f"Note: {self.note}  |"
         )
+
+

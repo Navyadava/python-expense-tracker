@@ -1,8 +1,7 @@
 import unittest
 
-from main import calculate_total
-from main import filter_by_category
-from main import validate_amount
+from main import calculate_total, filter_by_category
+from helpers import validate_amount
 
 
 class TestExpenseTracker(unittest.TestCase):
