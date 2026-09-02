@@ -3,6 +3,9 @@ import os
 from datetime import date
 
 
+from expense import Expense
+
+
 FILE_NAME = "expenses.csv"
 
 
@@ -222,5 +225,15 @@ def show_menu():
 
 
 if __name__ == "__main__":
+    test_expense = Expense(
+        25.00,
+        "Food",
+        "2026-09-02",
+        "Lunch"
+    )
+
+    print("\n--- OOP Expense Test ---")
+    print(test_expense.display())
+
     create_csv_file()
     show_menu()
