@@ -5,7 +5,7 @@ from datetime import date
 
 from expense import Expense
 from helpers import get_valid_amount, get_non_empty_text, get_valid_date
-
+from database import create_table, add_expense_to_db, get_all_expenses
 
 FILE_NAME = "expenses.csv"
 
@@ -192,15 +192,6 @@ def show_menu():
 
 
 if __name__ == "__main__":
-    test_expense = Expense(
-        25.00,
-        "Food",
-        "2026-09-02",
-        "Lunch"
-    )
-
-    print("\n--- OOP Expense Test ---")
-    print(test_expense)
-
+    create_table()
     create_csv_file()
     show_menu()
