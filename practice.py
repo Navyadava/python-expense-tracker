@@ -99,3 +99,21 @@ account1.Withdraw(1000)
 
 print(f"Current Balance: ${account1.balance:.2f}")
         
+
+#updating dates:
+
+from datetime import date, datetime, timedelta
+today = date.today()
+print("Today's date:", today)
+print("Formatted date:", today.strftime("%d %B %Y"))
+user_date = input("Enter a date (YYYY-MM-DD): ")
+
+try:
+    valid_date = datetime.strtime(user_date, "%Y-%M-%D").date()
+    print("Valid date:", valid_date)
+except ValueError:
+    print("Invalid date.")
+
+seven_days_later = today + timedelta(days=7)
+
+print("Seven days from today:", seven_days_later)

@@ -1,3 +1,5 @@
+from datetime import date, datetime
+
 def validate_amount(value):
     try:
         amount = float(value)
@@ -29,3 +31,27 @@ def get_non_empty_text(message):
             return text
 
         print("This field cannot be blank.")
+
+def get_valid_date():
+    today = date.today()
+
+    while True:
+        user_input = input(
+            f"Enter expense date (YYYY-MM-DD) or press Enter for today [{today}]: "
+        ).strip()
+
+        if user_input == "":
+            print(f"Date saved: {today}")
+            return str(today)
+
+        try:
+            valid_date = datetime.strptime(
+                user_input,
+                "%Y-%m-%d"
+            ).date()
+
+            print(f"Date saved: {valid_date}")
+            return str(valid_date)
+
+        except ValueError:
+            print("Invalid date. Please enter a valid date in YYYY-MM-DD format.")

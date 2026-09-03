@@ -4,7 +4,7 @@ from datetime import date
 
 
 from expense import Expense
-from helpers import get_valid_amount, get_non_empty_text
+from helpers import get_valid_amount, get_non_empty_text, get_valid_date
 
 
 FILE_NAME = "expenses.csv"
@@ -57,12 +57,7 @@ def filter_by_category(expenses, category):
 def add_expense():
     print("\n--- Add Expense ---")
 
-    expense_date = input(
-        "Enter date (YYYY-MM-DD) or press Enter for today: "
-    ).strip()
-
-    if expense_date == "":
-        expense_date = str(date.today())
+    expense_date = get_valid_date()
 
     category = get_non_empty_text("Enter category: ")
     amount = get_valid_amount()
