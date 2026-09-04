@@ -63,17 +63,17 @@ def add_expense():
     amount = get_valid_amount()
     note = input("Enter note: ").strip()
 
-    create_csv_file()
-
     with open(FILE_NAME, "a", newline="") as file:
         writer = csv.writer(file)
 
-        writer.writerow([
-            expense_date,
-            category,
-            f"{amount:.2f}",
-            note
-        ])
+    expense = Expense(
+        amount,
+        category,
+        expense_date,
+        note
+    )
+
+    add_expense_to_db(expense)
 
     print("\nExpense saved successfully!")
 
@@ -81,18 +81,18 @@ def add_expense():
 def view_expenses():
     print("\n--- Your Expenses ---")
 
-    expenses = load_expenses()
+    records = get_all_expenses()
 
-    if not expenses:
+    if not records:
         print("No expenses found.")
         return
 
-    for item in expenses:
+    for record in records:
         expense = Expense(
-            float(item["Amount"]),
-            item["Category"],
-            item["Date"],
-            item["Note"]
+            record[1],
+            record[2],
+            record[3],
+            record[4]
         )
 
         print(expense)
@@ -193,5 +193,4 @@ def show_menu():
 
 if __name__ == "__main__":
     create_table()
-    create_csv_file()
     show_menu()
