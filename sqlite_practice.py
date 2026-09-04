@@ -83,3 +83,65 @@ for student in students:
         f"Course: {student[2]} | "
         f"Marks: {student[3]}"
     )
+
+# Find students in one course
+connection = sqlite3.connect("practice.db")
+cursor = connection.cursor()
+
+course = input("\nEnter course to search: ")
+
+cursor.execute(
+    "SELECT * FROM students WHERE course = ?",
+    (course,)
+)
+
+students = cursor.fetchall()
+
+print("\nStudents in that course:")
+
+for student in students:
+    print(student)
+
+
+# Calculate average marks
+cursor.execute("SELECT AVG(marks) FROM students")
+
+average = cursor.fetchone()[0]
+
+print(f"\nAverage marks: {average:.2f}")
+
+
+# Update one student's marks
+student_id = int(input("\nEnter student ID to update: "))
+new_marks = float(input("Enter new marks: "))
+
+cursor.execute(
+    "UPDATE students SET marks = ? WHERE id = ?",
+    (new_marks, student_id)
+)
+
+connection.commit()
+
+
+# Delete one student
+delete_id = int(input("\nEnter student ID to delete: "))
+
+cursor.execute(
+    "DELETE FROM students WHERE id = ?",
+    (delete_id,)
+)
+
+connection.commit()
+
+
+# Display final table
+cursor.execute("SELECT * FROM students")
+
+students = cursor.fetchall()
+
+print("\nFinal Students Table:")
+
+for student in students:
+    print(student)
+
+connection.close()

@@ -5,7 +5,16 @@ from datetime import date
 
 from expense import Expense
 from helpers import get_valid_amount, get_non_empty_text, get_valid_date
-from database import create_table, add_expense_to_db, get_all_expenses
+from database import (
+    create_table, 
+    add_expense_to_db, 
+    get_all_expenses,
+    get_total_spending,
+    get_expenses_by_category,
+    search_expenses_by_note,
+    delete_expense_by_id,
+    update_expense_by_id
+)
 
 FILE_NAME = "expenses.csv"
 
@@ -79,7 +88,7 @@ def add_expense():
 
 
 def view_expenses():
-    print("\n--- Your Expenses ---")
+    print("\n--- All Expenses ---")
 
     records = get_all_expenses()
 
@@ -95,24 +104,15 @@ def view_expenses():
             record[4]
         )
 
-        print(expense)
+        print(f"ID: {record[0]} | {expense}")
 
 
-def show_today_total():
-    print("\n--- Today's Total ---")
+def show_total_spending():
 
-    today = str(date.today())
-    expenses = load_expenses()
+    total = get_total_spending()
 
-    today_expenses = []
-
-    for expense in expenses:
-        if expense["Date"] == today:
-            today_expenses.append(expense)
-
-    total = calculate_total(today_expenses)
-
-    print(f"Today's total: ${total:.2f}")
+    print("\n--- Total Spending ---")
+    print(f"Total spending: ${total:.2f}")
 
 
 def show_all_time_total():
@@ -124,34 +124,109 @@ def show_all_time_total():
     print(f"All-time total: ${total:.2f}")
 
 
-def show_category_expenses():
-    print("\n--- Filter By Category ---")
+def show_category_filter():
+    category = get_non_empty_text("Enter category: ")
 
-    category = input("Enter category: ").strip()
+    records = get_expenses_by_category(category)
 
-    if category == "":
-        print("Category cannot be blank.")
+    if not records:
+        print("No expenses found for this category.")
         return
 
-    expenses = load_expenses()
-    matching_expenses = filter_by_category(expenses, category)
+    print(f"\n--- {category} Expenses ---")
 
-    if not matching_expenses:
-        print(f"No expenses found for category: {category}")
-        return
-
-    print(f"\n{category} expenses:")
-
-    for expense in matching_expenses:
-        print(
-            f"{expense['Date']} | "
-            f"${float(expense['Amount']):.2f} | "
-            f"{expense['Note']}"
+    for record in records:
+        expense = Expense(
+            record[1],
+            record[2],
+            record[3],
+            record[4]
         )
 
-    total = calculate_total(matching_expenses)
+        print(f"ID: {record[0]} | {expense}")
 
-    print(f"\nTotal {category} spending: ${total:.2f}")
+def show_note_search():
+    keyword = get_non_empty_text("Enter note keyword: ")
+
+    records = search_expenses_by_note(keyword)
+
+    if not records:
+        print("No matching expenses found.")
+        return
+
+    print("\n--- Search Results ---")
+
+    for record in records:
+        expense = Expense(
+            record[1],
+            record[2],
+            record[3],
+            record[4]
+        )
+
+        print(f"ID: {record[0]} | {expense}")
+
+def delete_expense():
+    view_expenses()
+
+    try:
+        expense_id = int(input("\nEnter expense ID to delete: "))
+    except ValueError:
+        print("Invalid ID.")
+        return
+
+    confirm = input("Are you sure? (yes/no): ").strip().lower()
+
+    if confirm != "yes":
+        print("Delete cancelled.")
+        return
+
+    if delete_expense_by_id(expense_id):
+        print("Expense deleted successfully.")
+    else:
+        print("Expense ID not found.")
+
+def update_expense():
+    view_expenses()
+
+    try:
+        expense_id = int(input("\nEnter expense ID to update: "))
+    except ValueError:
+        print("Invalid ID.")
+        return
+
+    print("\nWhat do you want to update?")
+    print("1. Amount")
+    print("2. Note")
+
+    choice = input("Choose an option: ").strip()
+
+    if choice == "1":
+        new_amount = get_valid_amount()
+
+        if update_expense_by_id(
+            expense_id,
+            "amount",
+            new_amount
+        ):
+            print("Amount updated successfully.")
+        else:
+            print("Expense ID not found.")
+
+    elif choice == "2":
+        new_note = get_non_empty_text("Enter new note: ")
+
+        if update_expense_by_id(
+            expense_id,
+            "note",
+            new_note
+        ):
+            print("Note updated successfully.")
+        else:
+            print("Expense ID not found.")
+
+    else:
+        print("Invalid choice.")
 
 
 def show_menu():
@@ -160,11 +235,13 @@ def show_menu():
         print("    EXPENSE TRACKER")
         print("======================")
         print("1. Add Expense")
-        print("2. View Expenses")
-        print("3. Show Today's Total")
-        print("4. Show All-Time Total")
-        print("5. Filter By Category")
-        print("6. Exit")
+        print("2. View All Expenses")
+        print("3. Show Total Spending")
+        print("4. Filter By Category")
+        print("5. Search By Note")
+        print("6. Update Expense")
+        print("7. Delete Expense")
+        print("8. Exit")
 
         choice = input("Choose an option: ").strip()
 
@@ -175,20 +252,26 @@ def show_menu():
             view_expenses()
 
         elif choice == "3":
-            show_today_total()
+            show_total_spending()
 
         elif choice == "4":
-            show_all_time_total()
+            show_category_filter()
 
         elif choice == "5":
-            show_category_expenses()
+            show_note_search()
 
         elif choice == "6":
+            update_expense()
+
+        elif choice == "7":
+            delete_expense()
+
+        elif choice == "8":
             print("Goodbye!")
             break
 
         else:
-            print("Invalid choice. Please choose 1, 2, 3, 4, 5, or 6.")
+            print("Invalid choice. Please choose 1 through 8.")
 
 
 if __name__ == "__main__":
