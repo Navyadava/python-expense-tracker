@@ -1,31 +1,47 @@
 # Python Expense Tracker
 
-A command-line Python application for tracking and managing daily expenses.
+A command-line expense tracking application built with Python, SQLite, and Object-Oriented Programming.
+
+## Version 2
+
+Version 2 upgrades the original CSV-based Expense Tracker to use SQLite as the main database.
 
 ## Features
 
 - Add expenses
-- Save expenses to CSV
 - View all expenses
-- Calculate today's total
-- Calculate all-time total
-- Filter expenses by category
-- Input validation
-- Unit testing
+- Calculate total spending
+- Filter by category
+- Search by note
+- Update expense amount or note
+- Delete expenses by ID
+- Validate amounts and dates
+- SQLite database storage
+- OOP using an Expense class
+- Automated testing with pytest
 
-## Technologies
+## Technologies Used
 
 - Python
-- CSV module
-- unittest
+- SQLite
+- SQL
+- OOP
+- pytest
 - Git
 - GitHub
 
 ## How to Run
 
-1. Open the project folder.
-2. Open the terminal.
-3. Run:
+Run the application with:
 
 ```bash
 python main.py
+
+1. Add Expense
+2. View All Expenses
+3. Show Total Spending
+4. Filter By Category
+5. Search By Note
+6. Update Expense
+7. Delete Expense
+8. Exit

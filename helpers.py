@@ -55,3 +55,20 @@ def get_valid_date():
 
         except ValueError:
             print("Invalid date. Please enter a valid date in YYYY-MM-DD format.")
+
+def validate_non_empty_text(value):
+    value = value.strip()
+
+    if value == "":
+        raise ValueError("Text cannot be blank")
+
+    return value
+
+
+def validate_date(value):
+    try:
+        valid_date = datetime.strptime(value, "%Y-%m-%d").date()
+        return str(valid_date)
+
+    except ValueError:
+        raise ValueError("Invalid date")
